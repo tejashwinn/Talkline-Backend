@@ -61,7 +61,6 @@ public class PostsDao {
 	public boolean addToPosts(PostDetails post) {
 //		post.setContent();
 		String sqlQuery = "INSERT INTO posts VALUES(?,?,?,?,?,?)";
-		post.setPostUniqueId(UUID.randomUUID().toString());
 		try {
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
 			

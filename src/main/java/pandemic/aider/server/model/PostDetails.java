@@ -49,11 +49,6 @@ public class PostDetails implements Serializable {
 		return postUniqueId;
 	}
 	
-	public void setPostUniqueId(String postUniqueId) {
-		
-		this.postUniqueId = postUniqueId;
-	}
-	
 	public String getUserUsername() {
 		
 		return userUsername;
