@@ -7,7 +7,6 @@ import java.io.Serializable;
  * All the variable-members are private and can be accessed and modified using only the setter and getter methods
  * concept => Encapsulation
  */
-
 public class UserDetails implements Serializable {
 	
 	private final String uniqueId; //generated while signing up
