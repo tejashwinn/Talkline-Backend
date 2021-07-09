@@ -9,13 +9,10 @@ import pandemic.aider.server.service.ServerSideUserServer;
 @SpringBootApplication
 @RestController
 public class PandemicAiderApplication {
-	
 	public static void main(String[] args) {
-		
 		SpringApplication.run(PandemicAiderApplication.class, args);
 		ServerSideUserServer.runUserService();
 		ServerSidePostService.runServerPost();
 	}
-	
 }
 

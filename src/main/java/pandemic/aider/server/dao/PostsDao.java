@@ -6,26 +6,22 @@ import pandemic.aider.server.service.JsonServiceServer;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.UUID;
 
 public class PostsDao {
-	
 	private Connection connection;
 	
 	public PostsDao() {
-		
 		try {
 			//we don't need to add forName for microsoft sql
 			connection = DriverManager.getConnection(SQL_CREDENTIALS.URL, SQL_CREDENTIALS.USERNAME, SQL_CREDENTIALS.PASSWORD);
-//			System.out.println("Connected to database");
+			//			System.out.println("Connected to database");
 		} catch(Exception e) {
-//			System.out.println("Database not connected");
+			//			System.out.println("Database not connected");
 			e.printStackTrace();
 		}
 	}
 	
 	public void closeDbConnection() {
-		
 		try {
 			connection.close();
 		} catch(Exception e) {
@@ -44,12 +40,10 @@ public class PostsDao {
 			);
 	*/
 	public boolean checkPostId(String str) {
-		
 		String sqlQuery = "SELECT * FROM posts WHERE P_ID=" + "'" + str + "'";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);
-			
 			//returns boolean value
 			return result.next();
 		} catch(SQLException throwables) {
@@ -59,11 +53,10 @@ public class PostsDao {
 	}
 	
 	public boolean addToPosts(PostDetails post) {
-//		post.setContent();
+		//		post.setContent();
 		String sqlQuery = "INSERT INTO posts VALUES(?,?,?,?,?,?)";
 		try {
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
-			
 			statement.setString(1, post.getPostUniqueId());
 			statement.setString(2, post.getUserUsername());
 			statement.setString(3, post.getContent());
@@ -72,7 +65,6 @@ public class PostsDao {
 			statement.setString(6, post.getTime());
 			//Executes the prepared statement
 			statement.executeUpdate();
-			
 			return checkPostId(post.getPostUniqueId());
 		} catch(SQLException throwables) {
 			throwables.printStackTrace();
@@ -81,23 +73,19 @@ public class PostsDao {
 	}
 	
 	private String ReplaceWithSpace(String str) {
-		
 		str = str.replace("#", " #");
 		str = str.replace(",", " ,");
 		str = str.replace("]", " ]");
 		str = str.replace("\"", " \" ");
 		return str;
-		
 	}
 	
 	public ArrayList<PostDetails> retrievePosts(String str) {
-		
 		String sqlQuery = "SELECT * FROM posts WHERE P_UID=" + "'" + str + "'";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);
 			ArrayList<PostDetails> list = new ArrayList<>();
-
 			if(result.next()) {
 				list.add(resultToList(result));
 				while(result.next()) {
@@ -114,7 +102,6 @@ public class PostsDao {
 	}
 	
 	public ArrayList<PostDetails> searchRetrievedPosts(String str) {
-		
 		str = str.strip();
 		str = str.toLowerCase(Locale.ROOT);
 		String sqlQuery;
@@ -126,7 +113,6 @@ public class PostsDao {
 			sqlQuery = "SELECT * FROM posts WHERE lower(P_Hastags) LIKE " + "'%" + str + "%'";
 		}
 		//added __ not checked
-		
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);
@@ -147,14 +133,12 @@ public class PostsDao {
 	}
 	
 	public ArrayList<PostDetails> searchAndRetrievePostsOnPincode(String str) {
-		
 		str = str.toLowerCase(Locale.ROOT);
 		String sqlQuery = "SELECT * FROM posts WHERE lower(P_PinCode) LIKE '%" + str + "%'";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);
 			ArrayList<PostDetails> list = new ArrayList<>();
-			
 			if(result.next()) {
 				list.add(resultToList(result));
 				while(result.next()) {
@@ -171,7 +155,6 @@ public class PostsDao {
 	}
 	
 	public PostDetails resultToList(ResultSet resultSet) throws SQLException {
-		
 		String[] strArr = new String[6];
 		int i = 0;
 		strArr[i++] = resultSet.getString(i);
@@ -184,7 +167,6 @@ public class PostsDao {
 	}
 	
 	public boolean deletePost(String uniqueId) {
-		
 		String sqlQuery = "DELETE FROM posts WHERE P_ID= ?";
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
@@ -198,12 +180,10 @@ public class PostsDao {
 	}
 	
 	private boolean checkForPost(String postId) {
-		
 		String sqlQuery = "Select * FROM posts WHERE P_ID= " + "'" + postId + "'";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);
-			
 			//if it exists the value will be false if it is true to indicate that the post doesn't exist
 			return !result.next();
 		} catch(SQLException throwables) {
@@ -211,7 +191,5 @@ public class PostsDao {
 			return false; //to indicate query failed
 		}
 	}
-	
-	
 }
 

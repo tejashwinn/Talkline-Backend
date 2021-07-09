@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class UsersDao {
-	
 	private Connection connection;
 	
 	public UsersDao() {
-		
 		try {
 			connection = DriverManager.getConnection(SQL_CREDENTIALS.URL, SQL_CREDENTIALS.USERNAME, SQL_CREDENTIALS.PASSWORD);
 		} catch(Exception e) {
@@ -19,8 +17,12 @@ public class UsersDao {
 		}
 	}
 	
+	public static void main(String[] args) {
+		UsersDao temp = new UsersDao();
+		temp.clearPhoneNo("8073913646");
+	}
+	
 	public void closeDbConnection() {
-		
 		try {
 			connection.close();
 		} catch(Exception e) {
@@ -30,12 +32,9 @@ public class UsersDao {
 	
 	//will return true if the username doesn't exist
 	public boolean checkUsername(String username) {
-		
 		String sqlQuery = "SELECT U_Username FROM users WHERE U_Username=" + "'" + username + "'";
-		
 		try {
 			Statement statement = connection.createStatement();
-			
 			ResultSet result = statement.executeQuery(sqlQuery);
 			return !result.next();
 		} catch(SQLException throwables) {
@@ -45,7 +44,6 @@ public class UsersDao {
 	}
 	
 	public String[] checkCredentials(UserDetails user) {
-		
 		String[] temp = new String[6];
 		String sqlQuery = "SELECT * FROM users WHERE U_Username=" + "'" + user.getUsername() + "'" + " AND U_Password=" + "'" + user.getPassword() + "'";
 		try {
@@ -67,7 +65,6 @@ public class UsersDao {
 		String sqlQuery = "INSERT INTO users VALUES(?,?,?,?,?,?,?)";
 		try {
 			PreparedStatement statement = connection.prepareStatement(sqlQuery);
-			
 			statement.setString(1, user.getUniqueId());
 			statement.setString(2, user.getName());
 			statement.setString(3, user.getUsername());
@@ -77,7 +74,6 @@ public class UsersDao {
 			statement.setString(7, "");
 			//Executes the prepared statement
 			statement.executeUpdate();
-			
 			//sends the opposite of previous value to the client so that client can understand that the user has been added
 			return !checkUsername(user.getUsername());
 		} catch(SQLException throwables) {
@@ -87,16 +83,11 @@ public class UsersDao {
 	}
 	
 	public ArrayList<UserDetails> searchUsers(String string) {
-		
 		string = string.toLowerCase(Locale.ROOT);
 		string = string.replace(" ", "%");
 		string = '%' + string + '%';
-		
-		String sqlQuery =
-				"SELECT * FROM users WHERE lower(U_Name) LIKE '" + string + "' OR lower " +
-						"(U_Username) LIKE '" + string + "'";
+		String sqlQuery = "SELECT * FROM users WHERE lower(U_Name) LIKE '" + string + "' OR lower " + "(U_Username) LIKE '" + string + "'";
 		ArrayList<UserDetails> list = new ArrayList<>();
-		
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);
@@ -116,7 +107,6 @@ public class UsersDao {
 	}
 	
 	public boolean setOtp(String number, int otp) {
-		
 		String sqlQuery = "UPDATE users SET U_OTP='" + otp + "' WHERE U_PhNO='" + number + "'";
 		try {
 			Statement statement = connection.createStatement();
@@ -126,11 +116,9 @@ public class UsersDao {
 			throwables.printStackTrace();
 			return false;
 		}
-		
 	}
 	
 	public boolean changePassword(String newPassword) {
-		
 		String sqlQuery = "UPDATE users SET U_Password='" + newPassword + "'";
 		try {
 			Statement statement = connection.createStatement();
@@ -141,14 +129,13 @@ public class UsersDao {
 			return false;
 		}
 	}
+	//utility--------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//will return true if the username doesnt exist
 	public boolean checkPhNO(String number) {
-		
 		String sqlQuery = "SELECT * FROM users WHERE U_PhNO=" + "'" + number + "'";
 		try {
 			Statement statement = connection.createStatement();
-			
 			ResultSet result = statement.executeQuery(sqlQuery);
 			return !result.next();
 		} catch(SQLException throwables) {
@@ -156,11 +143,8 @@ public class UsersDao {
 			return false;
 		}
 	}
-
-//utility--------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public UserDetails resultToList(ResultSet resultSet) throws SQLException {
-		
 		String[] strArr = new String[6];
 		int i = 0;
 		strArr[i++] = resultSet.getString(i);
@@ -169,33 +153,25 @@ public class UsersDao {
 		strArr[i++] = "";
 		strArr[i++] = resultSet.getString(i);
 		strArr[i++] = resultSet.getString(i);
-		
 		return new UserDetails(strArr);
 	}
+	//todo---------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public String[] rowToArray(ResultSet resultSet) throws SQLException {
-		
 		String[] arrayOfResultSet = new String[6];
 		int count = 0;
 		for(int i = 1; i <= 6; i++) {
 			arrayOfResultSet[count] = resultSet.getString(i);
 			++count;
 		}
-		
 		return arrayOfResultSet;
 	}
-
-//todo---------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public boolean delete(UserDetails user) {
-		
-		String sqlQuery =
-				"DELETE FROM users WHERE U_Username='" + user.getUsername() + "' AND U_Password='" + user.getPassword() + "'";
+		String sqlQuery = "DELETE FROM users WHERE U_Username='" + user.getUsername() + "' AND U_Password='" + user.getPassword() + "'";
 		try {
-			
 			Statement statement = connection.createStatement();
 			statement.executeQuery(sqlQuery);
-			
 			return checkUsername(user.getUsername());
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -204,7 +180,6 @@ public class UsersDao {
 	}
 	
 	public void clearPhoneNo(String number) {
-		
 		String sqlQuery = "UPDATE users SET U_PhNO= '' WHERE U_PhNO='" + number + "'";
 		try {
 			Statement statement = connection.createStatement();
@@ -212,11 +187,5 @@ public class UsersDao {
 		} catch(SQLException throwables) {
 			throwables.printStackTrace();
 		}
-		
-	}
-	
-	public static void main(String[] args) {
-		UsersDao temp = new UsersDao();
-		temp.clearPhoneNo("8073913646");
 	}
 }

@@ -10,43 +10,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonServiceServer {
-	
 	public static UserDetails jsonToUser(String str) {
-		
 		Gson gson = new Gson();
 		return gson.fromJson(str, UserDetails.class);
 	}
 	
 	public static String userToJson(UserDetails user) throws JSONException {
-		
 		return new Gson().toJson(user);
 	}
 	
 	public static PostDetails jsonToPost(String str) {
-		
 		Gson gson = new Gson();
 		return gson.fromJson(str, PostDetails.class);
 	}
 	
 	public static ArrayList<String> strToList(String string) {
-		
 		Gson gson = new Gson();
-		return gson.fromJson(string, new TypeToken<List<String>>() {
-		}.getType());
+		return gson.fromJson(string, new TypeToken<List<String>>() { }.getType());
 	}
 	
 	public static String listToJson(ArrayList<String> list) {
-		
 		return new Gson().toJson(list);
 	}
 	
 	public static String fullListToJson(ArrayList<PostDetails> list) {
-		
 		return new Gson().toJson(list);
 	}
 	
 	public static String listToUsersJson(ArrayList<UserDetails> list) {
-		
 		return new Gson().toJson(list);
 	}
 }
