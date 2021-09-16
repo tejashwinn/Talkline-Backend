@@ -15,4 +15,3 @@ public class PandemicAiderApplication {
 		ServerSidePostService.runServerPost();
 	}
 }
-
