@@ -2,7 +2,6 @@ package pandemic.aider.server.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.json.JSONException;
 import pandemic.aider.server.model.PostDetails;
 import pandemic.aider.server.model.UserDetails;
 
