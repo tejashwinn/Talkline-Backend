@@ -12,16 +12,22 @@ public class ServerSideUserServer {
 	public static void runUserService() {
 		UsernameVerification usernameVerification = new UsernameVerification();
 		usernameVerification.start();
+		
 		AddUserToDatabase addUserToDatabase = new AddUserToDatabase();
 		addUserToDatabase.start();
+		
 		CheckCredentials checkCredentials = new CheckCredentials();
 		checkCredentials.start();
+		
 		ChangePassword changePassword = new ChangePassword();
 		changePassword.start();
+		
 		SendUserInfo sendUsersInfo = new SendUserInfo();
 		sendUsersInfo.start();
+		
 		GenerateOtp generateOtp = new GenerateOtp();
 		generateOtp.start();
+		
 		CheckPhNO checkPhNO = new CheckPhNO();
 		checkPhNO.start();
 	}

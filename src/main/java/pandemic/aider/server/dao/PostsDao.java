@@ -12,11 +12,10 @@ public class PostsDao {
 	
 	public PostsDao() {
 		try {
-			//we don't need to add forName for microsoft sql
-			connection = DriverManager.getConnection(SQL_CREDENTIALS.URL, SQL_CREDENTIALS.USERNAME, SQL_CREDENTIALS.PASSWORD);
-			//			System.out.println("Connected to database");
+			connection = DriverManager.getConnection(SQL_CREDENTIALS.URL,
+			                                         SQL_CREDENTIALS.USERNAME,
+			                                         SQL_CREDENTIALS.PASSWORD);
 		} catch(Exception e) {
-			//			System.out.println("Database not connected");
 			e.printStackTrace();
 		}
 	}
@@ -60,7 +59,8 @@ public class PostsDao {
 			statement.setString(1, post.getPostUniqueId());
 			statement.setString(2, post.getUserUsername());
 			statement.setString(3, post.getContent());
-			statement.setString(4, ReplaceWithSpace(JsonServiceServer.listToJson(post.getUserTags())));
+			statement.setString(4, ReplaceWithSpace(
+					JsonServiceServer.listToJson(post.getUserTags())));
 			statement.setString(5, post.getPincode());
 			statement.setString(6, post.getTime());
 			//Executes the prepared statement
@@ -112,7 +112,6 @@ public class PostsDao {
 		} else {
 			sqlQuery = "SELECT * FROM posts WHERE lower(P_Hastags) LIKE " + "'%" + str + "%'";
 		}
-		//added __ not checked
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(sqlQuery);

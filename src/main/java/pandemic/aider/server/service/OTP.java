@@ -15,6 +15,7 @@ public class OTP {
 		int otp = random.nextInt(999999);
 		String myUrl = "https://www.fast2sms.com/dev/bulkV2?authorization=" + apiKey + "&variables_values=" + otp + "&route=otp" + "&numbers=" + number;
 		URL url = new URL(myUrl);
+//		System.out.println(otp);
 		HttpsURLConnection con;
 		try {
 			con = (HttpsURLConnection) url.openConnection();

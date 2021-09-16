@@ -17,18 +17,23 @@ public class PostDetails implements Serializable {
 	public String getTime() {
 		return time;
 	}
+	
 	public String getPincode() {
 		return pincode;
 	}
+	
 	public String getContent() {
 		return content;
 	}
+	
 	public String getPostUniqueId() {
 		return postUniqueId;
 	}
+	
 	public String getUserUsername() {
 		return userUsername;
 	}
+	
 	public ArrayList<String> getUserTags() {
 		return userTags;
 	}

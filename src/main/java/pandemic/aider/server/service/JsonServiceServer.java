@@ -15,7 +15,7 @@ public class JsonServiceServer {
 		return gson.fromJson(str, UserDetails.class);
 	}
 	
-	public static String userToJson(UserDetails user) throws JSONException {
+	public static String userToJson(UserDetails user)  {
 		return new Gson().toJson(user);
 	}
 	

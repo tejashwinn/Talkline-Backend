@@ -10,14 +10,19 @@ import java.net.Socket;
 
 public class ServerSidePostService {
 	public static void runServerPost() {
+		
 		AddPostToDatabase newPost = new AddPostToDatabase();
 		newPost.start();
+		
 		SendPostToClient sendPostToClient = new SendPostToClient();
 		sendPostToClient.start();
+		
 		SearchPostToClient searchSendPostToClient = new SearchPostToClient();
 		searchSendPostToClient.start();
+		
 		SearchPinCodeToClient searchPinCodeToClient = new SearchPinCodeToClient();
 		searchPinCodeToClient.start();
+		
 		DeletePost deletePost = new DeletePost();
 		deletePost.start();
 	}
@@ -34,7 +39,6 @@ class AddPostToDatabase extends Thread {
 				ObjectInputStream serverSideInputStream = new ObjectInputStream(pipe.getInputStream());
 				String str = (String) serverSideInputStream.readObject();
 				newPost = JsonServiceServer.jsonToPost(str);
-				//				System.out.println(str);
 				ObjectOutputStream serverSideOutputStream = new ObjectOutputStream(pipe.getOutputStream());
 				PostsDao postNewRequest = new PostsDao();
 				serverSideOutputStream.writeObject(Boolean.toString(postNewRequest.addToPosts(newPost)));
@@ -57,12 +61,11 @@ class SendPostToClient extends Thread {
 				Socket pipe = serverSideSocketConnection.accept();
 				ObjectInputStream serverSideInputStream = new ObjectInputStream(pipe.getInputStream());
 				String str = (String) serverSideInputStream.readObject();
-				ObjectOutputStream serverSideOutputStream = new ObjectOutputStream(pipe.getOutputStream());
+				ObjectOutputStream outputStream = new ObjectOutputStream(pipe.getOutputStream());
 				PostsDao postNewRequest = new PostsDao();
-				serverSideOutputStream.writeObject(JsonServiceServer.fullListToJson(postNewRequest.retrievePosts(str)));
-				//				System.out.println(JsonServiceServer.fullListToJson());
+				outputStream.writeObject(JsonServiceServer.fullListToJson(postNewRequest.retrievePosts(str)));
 				serverSideInputStream.close();
-				serverSideOutputStream.close();
+				outputStream.close();
 				postNewRequest.closeDbConnection();
 			} while(true);
 		} catch(Exception e) {
@@ -80,13 +83,11 @@ class SearchPostToClient extends Thread {
 				Socket pipe = serverSideSocketConnection.accept();
 				ObjectInputStream serverSideInputStream = new ObjectInputStream(pipe.getInputStream());
 				String str = (String) serverSideInputStream.readObject();
-				ObjectOutputStream serverSideOutputStream = new ObjectOutputStream(pipe.getOutputStream());
+				ObjectOutputStream outputStream = new ObjectOutputStream(pipe.getOutputStream());
 				PostsDao postNewRequest = new PostsDao();
-				//				System.out.println("Received: " + str);
-				serverSideOutputStream.writeObject(JsonServiceServer.fullListToJson(postNewRequest.searchRetrievedPosts(str)));
-				//				System.out.println(JsonServiceServer.fullListToJson(postNewRequest.searchRetrievedPosts(str)));
+				outputStream.writeObject(JsonServiceServer.fullListToJson(postNewRequest.searchRetrievedPosts(str)));
 				serverSideInputStream.close();
-				serverSideOutputStream.close();
+				outputStream.close();
 				postNewRequest.closeDbConnection();
 			} while(true);
 		} catch(Exception e) {
